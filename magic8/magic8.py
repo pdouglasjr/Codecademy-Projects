@@ -1,5 +1,5 @@
 # Name:     magic8.py
-# Author:   Phillip D. Douglas, Jr.
+# Author:   Phillip Douglas
 
 import random
 
