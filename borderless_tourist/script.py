@@ -2,7 +2,7 @@
 # Author:   Phillip Douglas
 
 # Variables
-destinations = ["Paris, France","Shanghai, China","Los Angeles, USA","São Paulo, Brazil","Cairo, Egypt"]
+destinations = ["Paris, France","Shanghai, China","Los Angeles, USA","São Paulo, Brazil","Cairo, Egypt", "Seattle, USA"]
 attractions = [[] for i in destinations]
 
 # Functions
@@ -46,10 +46,25 @@ def find_attractions(destination, interests):
 
     try:
         # Get attractions that match the interest of the traveler.
-        attractions_with_interest.append([possible_attraction[0] for possible_attraction in attractions_in_city if interests in possible_attraction[1]].pop())
+        for possible_attraction in attractions_in_city:
+            for interest in interests:
+                if interest in possible_attraction[1]:
+                    attractions_with_interest.append(possible_attraction[0])
         return attractions_with_interest
     except IndexError:
         return
+
+def get_attractions_for_traveler(traveler):
+    traveler_name = traveler[0]
+    traveler_destination = traveler[1]
+    traveler_interests = traveler[2]
+    traveler_attractions = find_attractions(traveler_destination, traveler_interests)
+
+    interests_string = ""
+
+    interests_string = f"Hi {traveler_name}, we think you'll like these places around {traveler_destination}: {', '.join(traveler_attractions)}."
+
+    return interests_string
 
 if (__name__ == '__main__'):
     # Tests
@@ -66,7 +81,9 @@ if (__name__ == '__main__'):
         ["Los Angeles, USA", ["LACMA", ["art", "museum"]]],
         ["São Paulo, Brazil", ["São Paulo Zoo", ["zoo"]]],
         ["São Paulo, Brazil", ["Pàtio do Colè", ["historical site"]]],
-        ["Cairo, Egypt", ["Egyptian Museum", ["museum"]]]
+        ["Cairo, Egypt", ["Egyptian Museum", ["museum"]]],
+        ["Seattle, USA", ["the SAM", ["art", "museum"]]],
+        ["Seattle, USA", ["the Pike Place Market", ["art", "shopping", "market"]]]
     ]
 
     ## Test functions
@@ -96,11 +113,12 @@ if (__name__ == '__main__'):
     # Attractions
     for attraction in test_attractions:
         test_add_attractions(attraction)
-    # print(attractions)
+    
+    # la_arts = find_attractions("Los Angeles, USA", "arts")
+    # seattle_shopping = find_attractions("Seattle, USA", "shopping")
 
-    for d in destinations:
-        # find_attractions(d, 'art')
-        print(f" {d}: {find_attractions(d, 'art')}")
+    pdouglas_seattle = get_attractions_for_traveler(["Phillip Douglas", "Seattle, USA", ["art"]])
+    smills_france = get_attractions_for_traveler(["Dereck Smill", "Paris, France", ["monument"]])
 
-    la_arts = find_attractions("Los Angeles, USA", "art")
-    # print(la_arts)
+    print(pdouglas_seattle)
+    print(smills_france)
