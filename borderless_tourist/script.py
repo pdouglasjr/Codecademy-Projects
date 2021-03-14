@@ -1,6 +1,10 @@
 # Name:     borderless_tourist/script.py
 # Author:   Phillip Douglas
 
+# Variables
+destinations = ["Paris, France","Shanghai, China","Los Angeles, USA","São Paulo, Brazil","Cairo, Egypt"]
+attractions = [[] for i in destinations]
+
 # Functions
 def get_destination_index(destination):
     """Retrieve the index of a destination"""
@@ -31,6 +35,22 @@ def add_attraction(destination, attraction):
     except ValueError:
         return
 
+def find_attractions(destination, interests):
+    """Retrieve places that matches the interests of a traveler in a city new to them"""
+    # Get index of destination.
+    destination_index = get_destination_index(destination)
+    
+    # Attractions in the city.
+    attractions_in_city = attractions[destination_index]
+    attractions_with_interest = []
+
+    try:
+        # Get attractions that match the interest of the traveler.
+        attractions_with_interest.append([possible_attraction[0] for possible_attraction in attractions_in_city if interests in possible_attraction[1]].pop())
+        return attractions_with_interest
+    except IndexError:
+        return
+
 if (__name__ == '__main__'):
     # Tests
     ## Test variables
@@ -38,7 +58,7 @@ if (__name__ == '__main__'):
     test_traveler = ["Erin Wilkes","Shanghai, China",["historical site", "art"]]
     test_destination_index = -1
     test_attractions = [
-        ["Paris, France", ["the Louvre", ["art", "mus"]]],
+        ["Paris, France", ["the Louvre", ["art", "museum"]]],
         ["Paris, France", ["Arc de Triomphe", ["historical site", "monument"]]],
         ["Shanghai, China", ["Yu Garden", ["garden", "historical site"]]],
         ["Shanghai, China", ["Yuz Museum", ["art", "museum"]]],
@@ -67,18 +87,20 @@ if (__name__ == '__main__'):
     def test_add_attractions(attraction):
         add_attraction(attraction[0], attraction[1])
 
-    # Variables
-    destinations = ["Paris, France","Shanghai, China","Los Angeles, USA","São Paulo, Brazil","Cairo, Egypt"]
-    attractions = [[] for i in destinations]
-
     # Destinations
     # test_get_destination_index(test_destinations)
     
-    # # Traveler
+    # Traveler
     # test_get_traveler_location(test_traveler)
 
     # Attractions
     for attraction in test_attractions:
         test_add_attractions(attraction)
+    # print(attractions)
 
-    print(attractions)
+    for d in destinations:
+        # find_attractions(d, 'art')
+        print(f" {d}: {find_attractions(d, 'art')}")
+
+    la_arts = find_attractions("Los Angeles, USA", "art")
+    # print(la_arts)
